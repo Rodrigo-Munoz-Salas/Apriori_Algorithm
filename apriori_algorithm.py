@@ -92,7 +92,7 @@ class Apriori:
         self.frequent_itemsets = {}  # Set frequent itemsets dictionary
         self.frequent_itemsets[1] = self.eliminate_infrequent(support_counts)
 
-        while current_frequent_itemsets:
+        while frequent_itemsets[k]:
 
             # generate candidate itemsets
             candidates = self.generate_candidates(set(frequent_itemsets_k.keys()), k)
@@ -106,15 +106,16 @@ class Apriori:
             # Eliminate infrequent itemsets
             frequent_itemsets_k = self.eliminate_infrequent(support_counts)
 
-          # If empty, break
+            # If empty, break
             if not frequent_itemsets_k:
                 break
             
+            # Go to the next level
+            k += 1
+
             # Store frequent itemsets under their respective size category
             self.frequent_itemsets[k] = frequent_itemsets_k
             
-            # Go to the next level
-            k += 1
             
     
     def generate_rules(self):
@@ -127,6 +128,9 @@ class Apriori:
         Output:
         None (Updates self.rules)
         """
+        for k in frequent_itemsets:
+            for fritemset in frequent_itemsets[k]:
+                pass
         pass  # TODO: Implement rule generation logic
     
     def run(self, transactions):
