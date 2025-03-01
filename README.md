@@ -1,3 +1,5 @@
 # Apriori_Algorithm
 
-Maybe we change the skeleton. I will review it this weekend and see how accurately it is to develop the Apriori Algorithm
+How to run it:
+
+python3 apriori_algorithm.py 0.5 0.7 small.txt
