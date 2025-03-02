@@ -91,6 +91,7 @@ class Apriori:
                     if remaining:
                         subset_support = self.frequent_itemsets[len(subset)].get(subset, 0)
                         confidence = support_count / subset_support if subset_support else 0
+                        confidence = round(confidence, 1)
                         if confidence >= self.min_confidence:
                             self.association_rules.append((subset, remaining, confidence))
 
@@ -148,7 +149,7 @@ def generate_association_rules_file(frequent_itemsets, transactions_length, asso
             lift = rule_support / (lhs_support * rhs_support) if lhs_support > 0 and rhs_support > 0 else 0
             
             # Write the rule to the file
-            file.write(f"{' '.join(lhs)}|{' '.join(rhs)}|{rule_support_count}|{rule_support:.2f}|{confidence:.2f}|{lift:.2f}\n")
+            file.write(f"{' '.join(lhs)}|{' '.join(rhs)}|{rule_support_count}|{rule_support:.1f}|{confidence:.1f}|{lift:.1f}\n")
 
 # OUTPUT INFO TXT FILE
 def generate_summary_report(minsuppc, minconf, input_file_name, number_of_transactions, transactions, frequent_itemsets, association_rules, frequent_itemset_time, confident_rules_time, output_file="info03.txt"):
@@ -248,14 +249,14 @@ def practice_test(minsup, minconf, file_name):
     # create output files
     #generate_frequent_itemsets_file(frequent_itemsets, len(transactions))
     #generate_association_rules_file(frequent_itemsets, len(transactions), rules)
-    generate_summary_report(min_support, min_confidence, "small.txt", len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time)
+    #generate_summary_report(min_support, min_confidence, "small.txt", len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time)
 
-def execute_program():
+def execute_program(minsup, minconf, file_name):
     transactions = []
     current_transaction = []  # Initialize an empty list for the current transaction ID
     previous_transaction_id = None  # Track the previous transaction ID
     
-    with open("smallerset.txt", "r") as file:
+    with open(file_name, "r") as file:
         for line in file:
             transaction_id, item_id = map(int, line.split())  # Split the line into two numbers
             
@@ -275,8 +276,8 @@ def execute_program():
             transactions.append(current_transaction)
     
     # MODIFY THESE VALUES BASED ON EACH ITERATION
-    min_support = 0.5 
-    min_confidence = 0.7  
+    min_support = minsup
+    min_confidence = minconf
     
     apriori = Apriori(min_support, min_confidence)
     frequent_itemsets, rules, frequent_itemsets_time, rules_time = apriori.run(transactions)
@@ -308,4 +309,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     practice_test(args.minsup, args.minconf, args.input_file_name)
-    #execute_program()
+    #execute_program(args.minsup, args.minconf, args.input_file_name)
