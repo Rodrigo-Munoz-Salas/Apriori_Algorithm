@@ -1,4 +1,4 @@
-minsuppc:
+minsuppc: 3
 minconf: 0.7
 input file: small.txt
 Number of items: 4
@@ -9,6 +9,6 @@ Number of frequent 2-itemsets: 2
 Total number of frequent itemsets: 5
 Number of high-confidence rules: 3
 The rule with the highest confidence: frozenset({'milk'}) -> frozenset({'bread'}) | Confidence: 1.00
-The rule with the highest lift: frozenset({'milk'}) -> frozenset({'bread'}) | Lift: 1.00
-Time in seconds to find the frequent itemsets: 0.0001
+The rule with the highest lift: frozenset({'bread'}) -> frozenset({'milk'}) | Lift: 1.00
+Time in seconds to find the frequent itemsets: 0.0000
 Time in seconds to find the confident rules: 0.0000

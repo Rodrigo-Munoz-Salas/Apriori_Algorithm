@@ -37,7 +37,10 @@ class Apriori:
                 item_counts[frozenset([item])] = item_counts.get(frozenset([item]), 0) + 1
         
         # Filter by minimum support
-        self.frequent_itemsets[1] = {item: count for item, count in item_counts.items() if count / num_transactions >= self.min_support}
+        # self.frequent_itemsets[1] = {item: count for item, count in item_counts.items() if count / num_transactions >= self.min_support}
+
+        # Filter by minimum support count
+        self.frequent_itemsets[1] = {item: count for item, count in item_counts.items() if count >= self.min_support}
         
         k = 2
         current_itemsets = set(self.frequent_itemsets[1].keys())
@@ -52,7 +55,10 @@ class Apriori:
                         candidate_counts[candidate] += 1
             
             # Filter by minimum support
-            self.frequent_itemsets[k] = {itemset: count for itemset, count in candidate_counts.items() if count / num_transactions >= self.min_support}
+            #self.frequent_itemsets[k] = {itemset: count for itemset, count in candidate_counts.items() if count / num_transactions >= self.min_support}
+
+            # Filter by minimum support count
+            self.frequent_itemsets[k] = {itemset: count for itemset, count in candidate_counts.items() if count >= self.min_support}
             
             if not self.frequent_itemsets[k]:
                 del self.frequent_itemsets[k]
@@ -145,7 +151,7 @@ def generate_association_rules_file(frequent_itemsets, transactions_length, asso
             file.write(f"{' '.join(lhs)}|{' '.join(rhs)}|{rule_support_count}|{rule_support:.2f}|{confidence:.2f}|{lift:.2f}\n")
 
 # OUTPUT INFO TXT FILE
-def generate_summary_report(minconf, input_file_name, number_of_transactions, transactions, frequent_itemsets, association_rules, frequent_itemset_time, confident_rules_time, output_file="info03.txt"):
+def generate_summary_report(minsuppc, minconf, input_file_name, number_of_transactions, transactions, frequent_itemsets, association_rules, frequent_itemset_time, confident_rules_time, output_file="info03.txt"):
     # Calculate the length of the longest transaction
     longest_transaction_length = max(len(transaction) for transaction in transactions)
     
@@ -183,7 +189,7 @@ def generate_summary_report(minconf, input_file_name, number_of_transactions, tr
     
     # Write the summary report
     with open(output_file, "w") as file:
-        file.write(f"minsuppc:\n")
+        file.write(f"minsuppc: {minsuppc}\n")
         file.write(f"minconf: {minconf}\n")
         file.write(f"input file: {input_file_name}\n")
         file.write(f"Number of items: {len(set(item for transaction in transactions for item in transaction))}\n")
@@ -242,7 +248,7 @@ def practice_test(minsup, minconf, file_name):
     # create output files
     #generate_frequent_itemsets_file(frequent_itemsets, len(transactions))
     #generate_association_rules_file(frequent_itemsets, len(transactions), rules)
-    #generate_summary_report(min_confidence, "small.txt", len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time)
+    generate_summary_report(min_support, min_confidence, "small.txt", len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time)
 
 def execute_program():
     transactions = []
@@ -294,7 +300,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process minsup, minconf, and input file name.")
     
     # Add arguments
-    parser.add_argument("minsup", type=float, help="Minimum support value (float)")
+    parser.add_argument("minsup", type=int, help="Minimum support value (float)")
     parser.add_argument("minconf", type=float, help="Minimum confidence value (float)")
     parser.add_argument("input_file_name", type=str, help="The name of the input file")
     
