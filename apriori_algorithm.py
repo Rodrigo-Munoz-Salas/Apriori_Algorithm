@@ -144,7 +144,6 @@ def generate_association_rules_file(frequent_itemsets, transactions_length, asso
             rule_support_count = frequent_itemsets.get(len(lhs.union(rhs)), {}).get(lhs.union(rhs), 0)
             rule_support = rule_support_count / transactions_length
             
-            # I DO NOT KNOW IF THIS IS RIGHT
             # Calculate lift: rule support / (LHS support * RHS support)
             lift = rule_support / (lhs_support * rhs_support) if lhs_support > 0 and rhs_support > 0 else 0
             
@@ -152,71 +151,133 @@ def generate_association_rules_file(frequent_itemsets, transactions_length, asso
             file.write(f"{' '.join(lhs)}|{' '.join(rhs)}|{rule_support_count}|{rule_support:.1f}|{confidence:.1f}|{lift:.1f}\n")
 
 # OUTPUT INFO TXT FILE
-def generate_summary_report(minsuppc, minconf, input_file_name, number_of_transactions, transactions, frequent_itemsets, association_rules, frequent_itemset_time, confident_rules_time, output_file="info03.txt"):
-    # Calculate the length of the longest transaction
-    longest_transaction_length = max(len(transaction) for transaction in transactions)
+# def generate_summary_report(minsuppc, minconf, input_file_name, number_of_transactions, transactions, frequent_itemsets, association_rules, frequent_itemset_time, confident_rules_time, output_file="info03.txt"):
+#     # Calculate the length of the longest transaction
+#     longest_transaction_length = max(len(transaction) for transaction in transactions)
     
-    # Count the number of frequent itemsets for each size (1-itemsets, 2-itemsets, etc.)
-    frequent_itemset_counts = {i: len(itemsets) for i, itemsets in frequent_itemsets.items()}
+#     # Count the number of frequent itemsets for each size (1-itemsets, 2-itemsets, etc.)
+#     frequent_itemset_counts = {i: len(itemsets) for i, itemsets in frequent_itemsets.items()}
     
-    # Calculate the total number of frequent itemsets
+#     # Calculate the total number of frequent itemsets
+#     total_frequent_itemsets = sum(frequent_itemset_counts.values())
+    
+#     # Count the number of high-confidence rules (confidence >= minconf)
+#     high_confidence_rules = [(lhs, rhs, confidence) for lhs, rhs, confidence in association_rules if confidence >= minconf]
+#     high_confidence_count = len(high_confidence_rules)
+    
+#     # Find the rule with the highest confidence
+#     highest_confidence_rule = max(association_rules, key=lambda rule: rule[2], default=None)
+    
+#     # Find the rule with the highest lift
+#     highest_lift_rule = None
+#     max_lift = 0
+#     for lhs, rhs, confidence in association_rules:
+#         lhs_support_count = sum([support_count for itemset, support_count in frequent_itemsets.get(len(lhs), {}).items() if lhs.issubset(itemset)])
+#         rhs_support_count = frequent_itemsets.get(len(rhs), {}).get(rhs, 0)
+        
+#         lhs_support = lhs_support_count / number_of_transactions
+#         rhs_support = rhs_support_count / number_of_transactions
+        
+#         rule_support_count = frequent_itemsets.get(len(lhs.union(rhs)), {}).get(lhs.union(rhs), 0)
+#         rule_support = rule_support_count / number_of_transactions
+        
+#         lift = rule_support / (lhs_support * rhs_support) if lhs_support > 0 and rhs_support > 0 else 0
+#         if lift > max_lift:
+#             max_lift = lift
+#             highest_lift_rule = (lhs, rhs, confidence, lift)
+    
+#     # Write the summary report
+#     with open(output_file, "w") as file:
+#         file.write(f"minsuppc: {minsuppc}\n")
+#         file.write(f"minconf: {minconf}\n")
+#         file.write(f"input file: {input_file_name}\n")
+#         file.write(f"Number of items: {len(set(item for transaction in transactions for item in transaction))}\n")
+#         file.write(f"Number of transactions: {number_of_transactions}\n")
+#         file.write(f"The length of the longest transaction: {longest_transaction_length}\n")
+        
+#         # Write number of frequent itemsets for each size
+#         for size, count in frequent_itemset_counts.items():
+#             file.write(f"Number of frequent {size}-itemsets: {count}\n")
+        
+#         file.write(f"Total number of frequent itemsets: {total_frequent_itemsets}\n")
+#         file.write(f"Number of high-confidence rules: {high_confidence_count}\n")
+        
+#         if highest_confidence_rule:
+#             file.write(f"The rule with the highest confidence: {highest_confidence_rule[0]} -> {highest_confidence_rule[1]} | Confidence: {highest_confidence_rule[2]:.2f}\n")
+#         else:
+#             file.write(f"The rule with the highest confidence: \n")
+        
+#         if highest_lift_rule:
+#             file.write(f"The rule with the highest lift: {highest_lift_rule[0]} -> {highest_lift_rule[1]} | Lift: {highest_lift_rule[3]:.2f}\n")
+#         else:
+#             file.write(f"The rule with the highest lift: \n")
+        
+#         file.write(f"Time in seconds to find the frequent itemsets: {frequent_itemset_time:.4f}\n")
+#         file.write(f"Time in seconds to find the confident rules: {confident_rules_time:.4f}\n")
+
+def generate_summary_report(minsuppc, minconf, input_file_name, number_of_transactions, transactions, 
+                            frequent_itemsets, association_rules, 
+                            frequent_itemset_time, confident_rules_time):
+    # Calculate required values
+    num_items = len(set(item for transaction in transactions for item in transaction))
+    max_transaction_length = max(len(transaction) for transaction in transactions)
+    
+    # Count the number of frequent k-itemsets
+    frequent_itemset_counts = {k: len(v) for k, v in frequent_itemsets.items()}
     total_frequent_itemsets = sum(frequent_itemset_counts.values())
+
+    # Find the highest confidence and highest lift rules
+    highest_confidence = max(rule[2] for rule in association_rules) if association_rules else 0
+    highest_lift = 0
+    highest_lift_rules = []
     
-    # Count the number of high-confidence rules (confidence >= minconf)
-    high_confidence_rules = [(lhs, rhs, confidence) for lhs, rhs, confidence in association_rules if confidence >= minconf]
-    high_confidence_count = len(high_confidence_rules)
+    # Dictionary to store lift values for each rule
+    rule_lift_values = []
     
-    # Find the rule with the highest confidence
-    highest_confidence_rule = max(association_rules, key=lambda rule: rule[2], default=None)
-    
-    # I DO NOT KNOW IF THE LIFT CALCULATION IS RIGHT
-    # Find the rule with the highest lift
-    highest_lift_rule = None
-    max_lift = 0
     for lhs, rhs, confidence in association_rules:
-        lhs_support_count = sum([support_count for itemset, support_count in frequent_itemsets.get(len(lhs), {}).items() if lhs.issubset(itemset)])
-        rhs_support_count = frequent_itemsets.get(len(rhs), {}).get(rhs, 0)
-        
-        lhs_support = lhs_support_count / number_of_transactions
-        rhs_support = rhs_support_count / number_of_transactions
-        
-        rule_support_count = frequent_itemsets.get(len(lhs.union(rhs)), {}).get(lhs.union(rhs), 0)
-        rule_support = rule_support_count / number_of_transactions
-        
-        lift = rule_support / (lhs_support * rhs_support) if lhs_support > 0 and rhs_support > 0 else 0
-        if lift > max_lift:
-            max_lift = lift
-            highest_lift_rule = (lhs, rhs, confidence, lift)
-    
+        support_count_lhs = sum(frequent_itemsets[k][lhs] for k in frequent_itemsets if lhs in frequent_itemsets[k])
+        support_count_rhs = sum(frequent_itemsets[k][rhs] for k in frequent_itemsets if rhs in frequent_itemsets[k])
+        support_count_rule = sum(frequent_itemsets[k][lhs | rhs] for k in frequent_itemsets if (lhs | rhs) in frequent_itemsets[k])
+
+        support_lhs = support_count_lhs / number_of_transactions
+        support_rhs = support_count_rhs / number_of_transactions
+        support_rule = support_count_rule / number_of_transactions
+
+        lift = support_rule / (support_lhs * support_rhs)
+        rule_lift_values.append((lhs, rhs, confidence, lift))
+
+        if lift > highest_lift:
+            highest_lift = lift
+
+    # Get all rules with the highest confidence and highest lift
+    highest_confidence_rules = [(lhs, rhs, conf) for lhs, rhs, conf in association_rules if conf == highest_confidence]
+    highest_lift_rules = [(lhs, rhs, conf, lift) for lhs, rhs, conf, lift in rule_lift_values if lift == highest_lift]
+
     # Write the summary report
-    with open(output_file, "w") as file:
+    with open("info03.txt", "w") as file:
         file.write(f"minsuppc: {minsuppc}\n")
         file.write(f"minconf: {minconf}\n")
         file.write(f"input file: {input_file_name}\n")
-        file.write(f"Number of items: {len(set(item for transaction in transactions for item in transaction))}\n")
+        file.write(f"Number of items: {num_items}\n")
         file.write(f"Number of transactions: {number_of_transactions}\n")
-        file.write(f"The length of the longest transaction: {longest_transaction_length}\n")
-        
-        # Write number of frequent itemsets for each size
-        for size, count in frequent_itemset_counts.items():
-            file.write(f"Number of frequent {size}-itemsets: {count}\n")
-        
+        file.write(f"The length of the longest transaction: {max_transaction_length}\n")
+
+        for k, count in sorted(frequent_itemset_counts.items()):
+            file.write(f"Number of frequent {k}-itemsets: {count}\n")
         file.write(f"Total number of frequent itemsets: {total_frequent_itemsets}\n")
-        file.write(f"Number of high-confidence rules: {high_confidence_count}\n")
-        
-        if highest_confidence_rule:
-            file.write(f"The rule with the highest confidence: {highest_confidence_rule[0]} -> {highest_confidence_rule[1]} | Confidence: {highest_confidence_rule[2]:.2f}\n")
-        else:
-            file.write(f"The rule with the highest confidence: \n")
-        
-        if highest_lift_rule:
-            file.write(f"The rule with the highest lift: {highest_lift_rule[0]} -> {highest_lift_rule[1]} | Lift: {highest_lift_rule[3]:.2f}\n")
-        else:
-            file.write(f"The rule with the highest lift: \n")
-        
+
+        file.write(f"Number of high-confidence rules: {len(association_rules)}\n")
+
+        file.write(f"The rules with the highest confidence ({highest_confidence}):\n")
+        for lhs, rhs, conf in highest_confidence_rules:
+            file.write(f"{', '.join(lhs)} -> {', '.join(rhs)} | Confidence: {conf}\n")
+
+        file.write(f"The rules with the highest lift ({highest_lift}):\n")
+        for lhs, rhs, conf, lift in highest_lift_rules:
+            file.write(f"{', '.join(lhs)} -> {', '.join(rhs)} | Lift: {lift}\n")
+
         file.write(f"Time in seconds to find the frequent itemsets: {frequent_itemset_time:.4f}\n")
         file.write(f"Time in seconds to find the confident rules: {confident_rules_time:.4f}\n")
-
 
 
 def practice_test(minsup, minconf, file_name):
@@ -247,9 +308,9 @@ def practice_test(minsup, minconf, file_name):
     #apriori.print_association_rules()
 
     # create output files
-    #generate_frequent_itemsets_file(frequent_itemsets, len(transactions))
-    #generate_association_rules_file(frequent_itemsets, len(transactions), rules)
-    #generate_summary_report(min_support, min_confidence, "small.txt", len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time)
+    generate_frequent_itemsets_file(frequent_itemsets, len(transactions))
+    generate_association_rules_file(frequent_itemsets, len(transactions), rules)
+    generate_summary_report(min_support, min_confidence, "small.txt", len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time)
 
 def execute_program(minsup, minconf, file_name):
     transactions = []
@@ -275,10 +336,13 @@ def execute_program(minsup, minconf, file_name):
         if current_transaction:
             transactions.append(current_transaction)
     
-    # MODIFY THESE VALUES BASED ON EACH ITERATION
+    # for transaction in transactions:
+    #     print(transaction)
+    #     print()
+    
     min_support = minsup
     min_confidence = minconf
-    
+
     apriori = Apriori(min_support, min_confidence)
     frequent_itemsets, rules, frequent_itemsets_time, rules_time = apriori.run(transactions)
     
@@ -291,6 +355,12 @@ def execute_program(minsup, minconf, file_name):
     print(f"Time to find all association rules: {rules_time:.4f} seconds")
     print("Association Rules:", rules)
     #apriori.print_association_rules()
+
+    #create output files
+    generate_frequent_itemsets_file(frequent_itemsets, len(transactions), "items50.txt")
+    generate_association_rules_file(frequent_itemsets, len(transactions), rules, "rules50.txt")
+    generate_summary_report(min_support, min_confidence, file_name, len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time, "info50.txt")
+    print("OUTPUT FILES WERE SUCCESSFULLY GENERATED")
     
 
 # Example usage
