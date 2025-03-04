@@ -3,10 +3,12 @@ import matplotlib.pyplot as plt
 # Define the minsupp values and the corresponding execution times
 minsupp_values = [50, 75, 100, 125, 150, 200]
 times_frequent_itemsets = []
+q1q2= './data/q2q3/'
+q4= './data/q4/'
 
 # Read the result files
 for i in range(1, 7):
-    with open(f'info{i}.txt', 'r') as file:
+    with open(f'{q1q2}info{i}.txt', 'r') as file:
         lines = file.readlines()
         for line in lines:
             if line.startswith('Time in seconds to find the frequent itemsets'):
@@ -27,7 +29,7 @@ frequent_itemsets_count = []
 
 # Read the result files
 for i in range(1, 7):   # Files info1.txt to info6.txt
-    with open(f'info{i}.txt', 'r') as file:
+    with open(f'{q1q2}info{i}.txt', 'r') as file:
         lines = file.readlines()
         for line in lines:
             if line.startswith('Total number of frequent itemsets'):
@@ -49,7 +51,7 @@ rules_count = []
 
 # Read the result files
 for i in range(7, 12):  # Files info7.txt to info11.txt
-    with open(f'info{i}.txt', 'r') as file:
+    with open(f'{q4}info{i}.txt', 'r') as file:
         lines = file.readlines()
         for line in lines:
             if line.startswith('Number of high-confidence rules'):
