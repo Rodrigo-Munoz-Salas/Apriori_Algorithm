@@ -217,7 +217,7 @@ def generate_association_rules_file(frequent_itemsets, transactions_length, asso
 
 def generate_summary_report(minsuppc, minconf, input_file_name, number_of_transactions, transactions, 
                             frequent_itemsets, association_rules, 
-                            frequent_itemset_time, confident_rules_time):
+                            frequent_itemset_time, confident_rules_time, output_file="info03.txt"):
     # Calculate required values
     num_items = len(set(item for transaction in transactions for item in transaction))
     max_transaction_length = max(len(transaction) for transaction in transactions)
@@ -254,7 +254,7 @@ def generate_summary_report(minsuppc, minconf, input_file_name, number_of_transa
     highest_lift_rules = [(lhs, rhs, conf, lift) for lhs, rhs, conf, lift in rule_lift_values if lift == highest_lift]
 
     # Write the summary report
-    with open("info03.txt", "w") as file:
+    with open(output_file, "w") as file:
         file.write(f"minsuppc: {minsuppc}\n")
         file.write(f"minconf: {minconf}\n")
         file.write(f"input file: {input_file_name}\n")
@@ -272,9 +272,9 @@ def generate_summary_report(minsuppc, minconf, input_file_name, number_of_transa
         for lhs, rhs, conf in highest_confidence_rules:
             file.write(f"{', '.join(lhs)} -> {', '.join(rhs)} | Confidence: {conf}\n")
 
-        file.write(f"The rules with the highest lift ({highest_lift}):\n")
+        file.write(f"The rules with the highest lift ({highest_lift:.1f}):\n")
         for lhs, rhs, conf, lift in highest_lift_rules:
-            file.write(f"{', '.join(lhs)} -> {', '.join(rhs)} | Lift: {lift}\n")
+            file.write(f"{', '.join(lhs)} -> {', '.join(rhs)} | Lift: {lift:.1f}\n")
 
         file.write(f"Time in seconds to find the frequent itemsets: {frequent_itemset_time:.4f}\n")
         file.write(f"Time in seconds to find the confident rules: {confident_rules_time:.4f}\n")
@@ -357,9 +357,9 @@ def execute_program(minsup, minconf, file_name):
     #apriori.print_association_rules()
 
     #create output files
-    generate_frequent_itemsets_file(frequent_itemsets, len(transactions), "items50.txt")
-    generate_association_rules_file(frequent_itemsets, len(transactions), rules, "rules50.txt")
-    generate_summary_report(min_support, min_confidence, file_name, len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time, "info50.txt")
+    #generate_frequent_itemsets_file(frequent_itemsets, len(transactions), "items6.txt")
+    #generate_association_rules_file(frequent_itemsets, len(transactions), rules, "rules6.txt")
+    generate_summary_report(min_support, min_confidence, file_name, len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time, "info2.txt")
     print("OUTPUT FILES WERE SUCCESSFULLY GENERATED")
     
 
@@ -378,5 +378,5 @@ if __name__ == "__main__":
     # Parse arguments
     args = parser.parse_args()
 
-    practice_test(args.minsup, args.minconf, args.input_file_name)
-    #execute_program(args.minsup, args.minconf, args.input_file_name)
+    #practice_test(args.minsup, args.minconf, args.input_file_name)
+    execute_program(args.minsup, args.minconf, args.input_file_name)
