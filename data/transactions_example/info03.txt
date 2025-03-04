@@ -8,12 +8,7 @@ Number of frequent 1-itemsets: 3
 Number of frequent 2-itemsets: 2
 Total number of frequent itemsets: 5
 Number of high-confidence rules: 3
-The rules with the highest confidence (1.0):
-milk -> bread | Confidence: 1.0
-apple -> bread | Confidence: 1.0
-The rules with the highest lift (1.0):
-milk -> bread | Lift: 1.0
-bread -> milk | Lift: 1.0
-apple -> bread | Lift: 1.0
+The rule with the highest confidence: frozenset({'apple'}) -> frozenset({'bread'}) | Confidence: 1.00
+The rule with the highest lift: frozenset({'apple'}) -> frozenset({'bread'}) | Lift: 1.00
 Time in seconds to find the frequent itemsets: 0.0000
-Time in seconds to find the confident rules: 0.0000
+Time in seconds to find the confident rules: 0.0001
