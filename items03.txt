@@ -1,5 +1,0 @@
-milk|4|0.8
-bread|5|1.0
-apple|3|0.6
-milk bread|4|0.8
-bread apple|3|0.6
