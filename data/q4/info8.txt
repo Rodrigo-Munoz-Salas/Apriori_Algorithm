@@ -1,0 +1,18 @@
+minsuppc: 80
+minconf: 0.75
+input file: small.txt
+Number of items: 8743
+Number of transactions: 3056
+The length of the longest transaction: 84
+Number of frequent 1-itemsets: 173
+Number of frequent 2-itemsets: 166
+Number of frequent 3-itemsets: 28
+Total number of frequent itemsets: 367
+Number of high-confidence rules: 94
+The rules with the highest confidence (1.0):
+4944 -> 1 | Confidence: 1.0
+1322 -> 1 | Confidence: 1.0
+The rules with the highest lift (6.7):
+3533 -> 1285 | Lift: 6.7
+Time in seconds to find the frequent itemsets: 19.4503
+Time in seconds to find the confident rules: 0.0004

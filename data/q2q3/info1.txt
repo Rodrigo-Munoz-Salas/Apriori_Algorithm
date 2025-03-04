@@ -1,0 +1,67 @@
+minsuppc: 50
+minconf: 0.8
+input file: small.txt
+Number of items: 8743
+Number of transactions: 3056
+The length of the longest transaction: 84
+Number of frequent 1-itemsets: 396
+Number of frequent 2-itemsets: 607
+Number of frequent 3-itemsets: 175
+Number of frequent 4-itemsets: 17
+Total number of frequent itemsets: 1195
+Number of high-confidence rules: 489
+The rules with the highest confidence (1.0):
+908 -> 1 | Confidence: 1.0
+1322 -> 1 | Confidence: 1.0
+7446 -> 1 | Confidence: 1.0
+7443 -> 1 | Confidence: 1.0
+1081 -> 1 | Confidence: 1.0
+2973 -> 1 | Confidence: 1.0
+2082 -> 1 | Confidence: 1.0
+138 -> 1 | Confidence: 1.0
+8070 -> 1285 | Confidence: 1.0
+4944 -> 1 | Confidence: 1.0
+8429 -> 1 | Confidence: 1.0
+1053 -> 1 | Confidence: 1.0
+4834 -> 1 | Confidence: 1.0
+7446 -> 4782 | Confidence: 1.0
+15, 3533 -> 1285 | Confidence: 1.0
+4834, 1 -> 1285 | Confidence: 1.0
+4834, 1285 -> 1 | Confidence: 1.0
+4834, 649 -> 1 | Confidence: 1.0
+7446 -> 1, 4782 | Confidence: 1.0
+4782, 7446 -> 1 | Confidence: 1.0
+1, 7446 -> 4782 | Confidence: 1.0
+4834, 274 -> 1 | Confidence: 1.0
+7443, 4782 -> 1 | Confidence: 1.0
+4834, 1010 -> 1 | Confidence: 1.0
+3850, 436 -> 1774 | Confidence: 1.0
+1774, 436 -> 3850 | Confidence: 1.0
+4355, 7443 -> 1 | Confidence: 1.0
+649, 1010 -> 1 | Confidence: 1.0
+14, 436 -> 3850 | Confidence: 1.0
+1010, 1285 -> 1 | Confidence: 1.0
+4000, 436 -> 3850 | Confidence: 1.0
+1, 3533 -> 1285 | Confidence: 1.0
+4834, 649 -> 1285 | Confidence: 1.0
+326, 1010 -> 1 | Confidence: 1.0
+4000, 436 -> 1774 | Confidence: 1.0
+4000, 1950 -> 1774 | Confidence: 1.0
+1010, 274 -> 1 | Confidence: 1.0
+4355, 4782 -> 1 | Confidence: 1.0
+649, 1010, 1285 -> 1 | Confidence: 1.0
+4000, 3850, 436 -> 1774 | Confidence: 1.0
+4000, 1774, 436 -> 3850 | Confidence: 1.0
+4834, 274, 1285 -> 1 | Confidence: 1.0
+4834, 1, 274 -> 1285 | Confidence: 1.0
+649, 4834 -> 1, 1285 | Confidence: 1.0
+649, 1285, 4834 -> 1 | Confidence: 1.0
+649, 1, 4834 -> 1285 | Confidence: 1.0
+1010, 274, 1285 -> 1 | Confidence: 1.0
+649, 144, 1285 -> 1 | Confidence: 1.0
+14, 1774, 436 -> 3850 | Confidence: 1.0
+The rules with the highest lift (43.3):
+3850, 1774 -> 4000, 436 | Lift: 43.3
+4000, 436 -> 3850, 1774 | Lift: 43.3
+Time in seconds to find the frequent itemsets: 128.3364
+Time in seconds to find the confident rules: 0.0022

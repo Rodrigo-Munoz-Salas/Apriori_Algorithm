@@ -359,7 +359,7 @@ def execute_program(minsup, minconf, file_name):
     #create output files
     #generate_frequent_itemsets_file(frequent_itemsets, len(transactions), "items6.txt")
     #generate_association_rules_file(frequent_itemsets, len(transactions), rules, "rules6.txt")
-    generate_summary_report(min_support, min_confidence, file_name, len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time, "info2.txt")
+    generate_summary_report(min_support, min_confidence, file_name, len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time, "info11.txt")
     print("OUTPUT FILES WERE SUCCESSFULLY GENERATED")
     
 
