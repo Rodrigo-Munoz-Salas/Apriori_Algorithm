@@ -137,13 +137,13 @@ class Apriori:
 def generate_frequent_itemsets_file(frequent_itemsets, transactions_length, output_file="items03.txt"):
     with open(output_file, "w") as file:
         # Loop through each itemset size (1-itemsets, 2-itemsets, etc.)
-        for itemset_size, itemsets in frequent_itemsets.items():
+        for _, itemsets in frequent_itemsets.items():
             for itemset, support_count in itemsets.items():
                 # Format the itemset as a string
                 itemset_str = " ".join(itemset) if isinstance(itemset, frozenset) else itemset
                 support = support_count / transactions_length
                 # Write the line to the file
-                file.write(f"{itemset_str}|{support_count}|{support:.1f}\n")
+                file.write(f"{itemset_str}|{support_count}|{support:.3f}\n")
 
 # OUTPUT ASSOCIATION RULES TXT FILE
 def generate_association_rules_file(frequent_itemsets, transactions_length, association_rules, output_file="rules03.txt"):
@@ -166,7 +166,7 @@ def generate_association_rules_file(frequent_itemsets, transactions_length, asso
             lift = rule_support / (lhs_support * rhs_support) if lhs_support > 0 and rhs_support > 0 else 0
             
             # Write the rule to the file
-            file.write(f"{' '.join(lhs)}|{' '.join(rhs)}|{rule_support_count}|{rule_support:.1f}|{confidence:.1f}|{lift:.1f}\n")
+            file.write(f"{' '.join(lhs)}|{' '.join(rhs)}|{rule_support_count}|{rule_support:.3f}|{confidence:.3f}|{lift:.3f}\n")
 
 # Output info.txt file
 def generate_summary_report(minsuppc, minconf, input_file_name, number_of_transactions, transactions, 
@@ -292,6 +292,10 @@ def execute_program(minsup, minconf, file_name):
     # for transaction in transactions:
     #     print(transaction)
     #     print()
+
+    with open("transactions.txt", "w") as file:
+        for transaction in transactions:
+            file.write(f"{transaction}\n")
     
     min_support = minsup
     min_confidence = minconf
@@ -309,9 +313,9 @@ def execute_program(minsup, minconf, file_name):
     #apriori.print_association_rules()
 
     #create output files
-    #generate_frequent_itemsets_file(frequent_itemsets, len(transactions), "test1.txt")
-    #generate_association_rules_file(frequent_itemsets, len(transactions), rules, "test2.txt")
-    generate_summary_report(min_support, min_confidence, file_name, len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time, "info11.txt")
+    generate_frequent_itemsets_file(frequent_itemsets, len(transactions))
+    generate_association_rules_file(frequent_itemsets, len(transactions), rules)
+    generate_summary_report(min_support, min_confidence, file_name, len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time)
     print("OUTPUT FILES WERE SUCCESSFULLY GENERATED")
     
 
