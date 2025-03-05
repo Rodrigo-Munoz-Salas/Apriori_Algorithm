@@ -23,7 +23,7 @@ marker_color = "#c59b41" #Gold marker
 plt.figure(facecolor = background_color)
 
 # Plot time vs minsupp
-plt.plot(minsupp_values, times_frequent_itemsets, marker='o', color=line_color, markerfacecolor=marker_color, markersize=8, label="Time for Frequent Itemsets")
+plt.plot(minsupp_values, times_frequent_itemsets, marker='o', color=line_color,linestyle = '-', markerfacecolor=marker_color, markersize=8, label="Time for Frequent Itemsets")
 plt.xlabel('Minimum Support Count', color='white')
 plt.ylabel('Time To Generate Frequent Itemsets (seconds)', color='white')
 plt.title('Time Required vs Minimum Support', color='white')
@@ -31,7 +31,7 @@ plt.grid(True, linestyle='--', linewidth=0.5, color='gray')
 plt.legend(edgecolor= 'white')
 
 # Set tick colors
-plt.xticks(color='white')
+plt.xticks(minsupp_values, color='white')
 plt.yticks(color='white')
 plt.show()
 
@@ -59,8 +59,9 @@ plt.grid(True, linestyle='--', linewidth=0.5, color='gray')
 plt.legend(edgecolor= 'white')
 
 # Set tick colors
-plt.xticks(color='white')
+plt.xticks(minsupp_values,color='white')
 plt.yticks(color='white')
+
 plt.show()
 
 # Define the minconf values
@@ -88,6 +89,6 @@ plt.grid(True, linestyle='--', linewidth=0.5, color='gray')
 plt.legend(edgecolor= 'white')
 
 # Set tick colors
-plt.xticks(color='white')
+plt.xticks(minconf_values, color='white')
 plt.yticks(color='white')
 plt.show()
