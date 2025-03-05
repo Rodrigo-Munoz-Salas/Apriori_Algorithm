@@ -8,11 +8,10 @@ Number of frequent 1-itemsets: 173
 Number of frequent 2-itemsets: 166
 Number of frequent 3-itemsets: 28
 Total number of frequent itemsets: 367
-Number of high-confidence rules: 94
-The rules with the highest confidence (1.0):
-4944 -> 1 | Confidence: 1.0
-1322 -> 1 | Confidence: 1.0
-The rules with the highest lift (6.7):
-3533 -> 1285 | Lift: 6.7
-Time in seconds to find the frequent itemsets: 20.1855
+Number of high-confidence rules: 61
+The rules with the highest confidence (0.988):
+4944 -> 1 | Confidence: 0.988
+The rules with the highest lift (6.720):
+3533 -> 1285 | Lift: 6.720
+Time in seconds to find the frequent itemsets: 22.5151
 Time in seconds to find the confident rules: 0.0005

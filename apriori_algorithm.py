@@ -112,7 +112,7 @@ class Apriori:
 
                         # Compute confidence: S(itemset) / S(lhs)
                         confidence = support_count / lhs_support if lhs_support else 0
-                        confidence = round(confidence, 1)
+                        confidence = round(confidence, 3)
                         
                         # Add rule if confidence meets the threshold 
                         if confidence >= self.min_confidence:
@@ -226,9 +226,9 @@ def generate_summary_report(minsuppc, minconf, input_file_name, number_of_transa
         for lhs, rhs, conf in highest_confidence_rules:
             file.write(f"{', '.join(lhs)} -> {', '.join(rhs)} | Confidence: {conf}\n")
 
-        file.write(f"The rules with the highest lift ({highest_lift:.1f}):\n")
+        file.write(f"The rules with the highest lift ({highest_lift:.3f}):\n")
         for lhs, rhs, conf, lift in highest_lift_rules:
-            file.write(f"{', '.join(lhs)} -> {', '.join(rhs)} | Lift: {lift:.1f}\n")
+            file.write(f"{', '.join(lhs)} -> {', '.join(rhs)} | Lift: {lift:.3f}\n")
 
         file.write(f"Time in seconds to find the frequent itemsets: {frequent_itemset_time:.4f}\n")
         file.write(f"Time in seconds to find the confident rules: {confident_rules_time:.4f}\n")
@@ -309,9 +309,9 @@ def execute_program(minsup, minconf, file_name):
     #apriori.print_association_rules()
 
     #create output files
-    generate_frequent_itemsets_file(frequent_itemsets, len(transactions), "test1.txt")
-    generate_association_rules_file(frequent_itemsets, len(transactions), rules, "test2.txt")
-    generate_summary_report(min_support, min_confidence, file_name, len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time, "test3.txt")
+    #generate_frequent_itemsets_file(frequent_itemsets, len(transactions), "test1.txt")
+    #generate_association_rules_file(frequent_itemsets, len(transactions), rules, "test2.txt")
+    generate_summary_report(min_support, min_confidence, file_name, len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time, "info11.txt")
     print("OUTPUT FILES WERE SUCCESSFULLY GENERATED")
     
 
