@@ -253,9 +253,8 @@ def generate_summary_report(minsuppc, minconf, input_file_name, number_of_transa
         file.write(f"Time in seconds to find the frequent itemsets: {frequent_itemset_time:.4f}\n")
         file.write(f"Time in seconds to find the confident rules: {confident_rules_time:.4f}\n")
 
-def practice_test(minsup, minconf, file_name=''):
-    # FILE NAME SHOULD BE USED HERE TO OPEN THE SMALL.TXT FILE
-    print(file_name)
+def practice_test(min_support, min_confidence, file_name=''):
+    # Transactions simple example
     transactions = [
         ["milk", "bread", "nuts", "apple"],
         ["milk", "bread", "nuts"],
@@ -264,16 +263,17 @@ def practice_test(minsup, minconf, file_name=''):
         ["bread", "apple"],
     ]
     
-    min_support =  minsup # 0.5 Example threshold
-    min_confidence = minconf  # 0.7 Example threshold
-    
+    # Running Apriori Algorithm
     apriori = Apriori(min_support, min_confidence)
     frequent_itemsets, rules, frequent_itemsets_time, rules_time = apriori.run(transactions)
     
+    # Printing all frequent itemsets
     print("Printing the frequent itemset, the number next to the set is the support count.")
     print(f"Time to find all frequent itemsets: {frequent_itemsets_time:.4f} seconds")
     print("Frequent Itemsets:", frequent_itemsets)
     print()
+
+    # Printin all association rules
     print("Printing the association rules based on the frequent itemsets. The number next to the association is the confidence.")
     print(f"Time to find all association rules: {rules_time:.4f} seconds")
     print("Association Rules:", rules)
@@ -284,7 +284,7 @@ def practice_test(minsup, minconf, file_name=''):
     generate_association_rules_file(frequent_itemsets, len(transactions), rules)
     generate_summary_report(min_support, min_confidence, "small.txt", len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time)
 
-def execute_program(minsup, minconf, file_name):
+def execute_program(min_support, min_confidence, file_name):
     transactions = []
     current_transaction = []  # Initialize an empty list for the current transaction ID
     previous_transaction_id = None  # Track the previous transaction ID
@@ -308,24 +308,22 @@ def execute_program(minsup, minconf, file_name):
         if current_transaction:
             transactions.append(current_transaction)
     
-    # for transaction in transactions:
-    #     print(transaction)
-    #     print()
-
+    # Check if the transactions were stored in the desired format
     with open("transactions.txt", "w") as file:
         for transaction in transactions:
             file.write(f"{transaction}\n")
-    
-    min_support = minsup
-    min_confidence = minconf
 
+    # Running the Apriori Algorithm
     apriori = Apriori(min_support, min_confidence)
     frequent_itemsets, rules, frequent_itemsets_time, rules_time = apriori.run(transactions)
     
+    # Print the information of frequent itemsets that were found
     print("Printing the frequent itemset, the number next to the set is the support count.")
     print(f"Time to find all frequent itemsets: {frequent_itemsets_time:.4f} seconds")
     print("Frequent Itemsets:", frequent_itemsets)
     print()
+
+    # Print infomration of association rules that were found
     print("Printing the association rules based on the frequent itemsets. The number next to the association is the confidence.")
     print(f"Time to find all association rules: {rules_time:.4f} seconds")
     print("Association Rules:", rules)
@@ -334,8 +332,12 @@ def execute_program(minsup, minconf, file_name):
     #create output files
     generate_frequent_itemsets_file(frequent_itemsets, len(transactions))
     generate_association_rules_file(frequent_itemsets, len(transactions), rules)
-    generate_summary_report(min_support, min_confidence, file_name, len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time)
-    print("OUTPUT FILES WERE SUCCESSFULLY GENERATED")
+    generate_summary_report(min_support, min_confidence, file_name, len(transactions), transactions, 
+                            frequent_itemsets, rules, frequent_itemsets_time, rules_time
+    )
+
+    # Confirmation message
+    print("\nOUTPUT FILES WERE SUCCESSFULLY GENERATED")
     
 # Example usage
 if __name__ == "__main__":
