@@ -43,9 +43,14 @@ class Apriori:
                 item_counts[frozenset([item])] = item_counts.get(frozenset([item]), 0) + 1
 
         # Candidate Pruning: Filter out infrequent items based on the min support count threshold
-        self.frequent_itemsets[1] = {
-            item: count for item, count in item_counts.items() if count >= self.min_support
-        }
+        self.frequent_itemsets[1] = {}  # Initialize an empty dictionary for 1-item frequent itemsets
+
+        # Iterate through all item counts
+        for item, count in item_counts.items():
+            # Check if the item's support count meets or exceeds the minimum support threshold
+            if count >= self.min_support:
+                # Add the itemset to the frequent itemsets dictionary
+                self.frequent_itemsets[1][item] = count
         
         # Generate frequent itemsets of increasing length
         k = 2
@@ -66,9 +71,15 @@ class Apriori:
                         candidate_counts[candidate] += 1
 
             # Filter by minimum support count and store frequent k-itemsets
-            self.frequent_itemsets[k] = {
-                itemset: count for itemset, count in candidate_counts.items() if count >= self.min_support
-            }
+            self.frequent_itemsets[k] = {}  # Initialize an empty dictionary for k-item frequent itemsets
+
+            # Iterate through all candidate itemsets and their counts
+            for itemset, count in candidate_counts.items():
+            # Check if the item's support count meets or exceeds the minimum support threshold
+                if count >= self.min_support:
+                    # Add the itemset to the frequent itemsets dictionary
+                    self.frequent_itemsets[k][itemset] = count
+
             
             # If no frequent itemsets of size k, delete the entry of size 'k' and stop the process
             if not self.frequent_itemsets[k]:
@@ -135,6 +146,7 @@ class Apriori:
     
 # OUTPUT FREQUENT ITEMSETS TXT FILE
 def generate_frequent_itemsets_file(frequent_itemsets, transactions_length, output_file="items03.txt"):
+    # Write the items txt file
     with open(output_file, "w") as file:
         # Loop through each itemset size (1-itemsets, 2-itemsets, etc.)
         for _, itemsets in frequent_itemsets.items():
@@ -147,6 +159,7 @@ def generate_frequent_itemsets_file(frequent_itemsets, transactions_length, outp
 
 # OUTPUT ASSOCIATION RULES TXT FILE
 def generate_association_rules_file(frequent_itemsets, transactions_length, association_rules, output_file="rules03.txt"):
+    # Write the rules txt file
     with open(output_file, "w") as file:
         # Loop through each association rule
         for lhs, rhs, confidence in association_rules:
@@ -188,18 +201,25 @@ def generate_summary_report(minsuppc, minconf, input_file_name, number_of_transa
     # Dictionary to store lift values for each rule
     rule_lift_values = []
     
+    # Iterate through all association rules (LHS → RHS) with their confidence values
     for lhs, rhs, confidence in association_rules:
+        # Compute support count for LHS, RHS, and both LHS or RHS (number of transactions that contains the three attributes)
         support_count_lhs = sum(frequent_itemsets[k][lhs] for k in frequent_itemsets if lhs in frequent_itemsets[k])
         support_count_rhs = sum(frequent_itemsets[k][rhs] for k in frequent_itemsets if rhs in frequent_itemsets[k])
         support_count_rule = sum(frequent_itemsets[k][lhs | rhs] for k in frequent_itemsets if (lhs | rhs) in frequent_itemsets[k])
 
-        support_lhs = support_count_lhs / number_of_transactions
-        support_rhs = support_count_rhs / number_of_transactions
-        support_rule = support_count_rule / number_of_transactions
+        # Compute the support
+        support_lhs = support_count_lhs / number_of_transactions # P(LHS)
+        support_rhs = support_count_rhs / number_of_transactions # P(RHS)
+        support_rule = support_count_rule / number_of_transactions # P(LHS, RHS)
 
+        # Compute Lift = P(LHS, RHS) / P(LHS) * P(RHS)
         lift = support_rule / (support_lhs * support_rhs)
+
+        # Store the rule
         rule_lift_values.append((lhs, rhs, confidence, lift))
 
+        # Set highest lift
         if lift > highest_lift:
             highest_lift = lift
 
@@ -207,7 +227,7 @@ def generate_summary_report(minsuppc, minconf, input_file_name, number_of_transa
     highest_confidence_rules = [(lhs, rhs, conf) for lhs, rhs, conf in association_rules if conf == highest_confidence]
     highest_lift_rules = [(lhs, rhs, conf, lift) for lhs, rhs, conf, lift in rule_lift_values if lift == highest_lift]
 
-    # Write the summary report
+    # Write the info txt file
     with open(output_file, "w") as file:
         file.write(f"minsuppc: {minsuppc}\n")
         file.write(f"minconf: {minconf}\n")
@@ -232,7 +252,6 @@ def generate_summary_report(minsuppc, minconf, input_file_name, number_of_transa
 
         file.write(f"Time in seconds to find the frequent itemsets: {frequent_itemset_time:.4f}\n")
         file.write(f"Time in seconds to find the confident rules: {confident_rules_time:.4f}\n")
-
 
 def practice_test(minsup, minconf, file_name=''):
     # FILE NAME SHOULD BE USED HERE TO OPEN THE SMALL.TXT FILE
@@ -318,7 +337,6 @@ def execute_program(minsup, minconf, file_name):
     generate_summary_report(min_support, min_confidence, file_name, len(transactions), transactions, frequent_itemsets, rules, frequent_itemsets_time, rules_time)
     print("OUTPUT FILES WERE SUCCESSFULLY GENERATED")
     
-
 # Example usage
 if __name__ == "__main__":
     pass
